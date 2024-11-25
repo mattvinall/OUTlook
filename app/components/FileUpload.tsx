@@ -102,10 +102,11 @@ const FileUpload: React.FC = () => {
                     setShowConfetti(true); // Trigger celebration animation
                     setLoading(false);
                 },
-                error: (error: Error): void => {
+                // Replace the unused 'error' parameter with an underscore to indicate it's intentionally unused
+                error: (_error: Error): void => {
                     setError("Error parsing the CSV file.");
                     setLoading(false);
-                },
+                }
             });
         } catch (error) {
             setError("An error occurred while processing the file.");
