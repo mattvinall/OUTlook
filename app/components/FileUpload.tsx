@@ -103,7 +103,7 @@ const FileUpload: React.FC = () => {
                     setLoading(false);
                 },
                 // Replace the unused 'error' parameter with an underscore to indicate it's intentionally unused
-                error: (_error: Error): void => {
+                error: (_error: any): void => {
                     setError("Error parsing the CSV file.");
                     setLoading(false);
                 }
