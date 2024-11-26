@@ -53,14 +53,53 @@ const FileUpload: React.FC = () => {
                 complete: async (results: ParseResult<CSVRow>) => {
                     const data: CSVRow[] = results.data;
 
-                    const domainColumn: string | undefined = Object.keys(data[0] || {}).find((col) =>
-                        ["domain", "website", "url", "Website", "Domain", "Company website", "company domain"].includes(
-                            col.toLowerCase()
-                        )
+                    // Comprehensive list of potential domain-related column names
+                    const domainColumnNames = [
+                        "domain",
+                        "website",
+                        "url",
+                        "web address",
+                        "company website",
+                        "company domain",
+                        "business website",
+                        "business domain",
+                        "Domain",
+                        "Website",
+                        "URL",
+                        "Web Address",
+                        "Company Website",
+                        "Company Domain",
+                        "web_site",
+                        "web-site",
+                        "web.address",
+                        "company_website",
+                        "company.website",
+                        "companydomain",
+                        "businesswebsite",
+                        "homepage",
+                        "landing_page",
+                        "primary_url",
+                        "root_domain",
+                        "site_url",
+                        "website_url",
+                        "corporate_site",
+                        "corporate_url",
+                        "organization_url",
+                        "organization_site",
+                        "company_url",
+                        "business_url",
+                    ];
+
+                    // Find the column that matches one of the names in the list
+                    const domainColumn = Object.keys(data[0] || {}).find((col) =>
+                        domainColumnNames.includes(col.toLowerCase())
                     );
 
                     if (!domainColumn) {
-                        setError("No domain/website column found in the CSV.");
+                        setError(
+                            "No domain-related column found. Please ensure your file includes one of the following: " +
+                            domainColumnNames.join(", ")
+                        );
                         setLoading(false);
                         return;
                     }
@@ -88,7 +127,7 @@ const FileUpload: React.FC = () => {
                             );
 
                             if (hasOutlook) {
-                                filteredRecords += 1; // Increment filtered count
+                                filteredRecords += 1;
                             } else {
                                 filteredData.push(row);
                             }
@@ -98,23 +137,19 @@ const FileUpload: React.FC = () => {
                     }
 
                     setProcessedData(filteredData);
-                    setFilteredCount(filteredRecords); // Update state with the count
-                    setShowConfetti(true); // Trigger celebration animation
+                    setFilteredCount(filteredRecords);
                     setLoading(false);
                 },
-                // Replace the unused 'error' parameter with an underscore to indicate it's intentionally unused
                 error: (error: Error): void => {
-                    console.error("Parsing error:", error); // Log the error
                     setError("Error parsing the CSV file.");
                     setLoading(false);
-                }
+                },
             });
         } catch (error) {
             setError("An error occurred while processing the file.");
             setLoading(false);
         }
     };
-
     const downloadCSV = (): void => {
         if (!processedData) return;
 
