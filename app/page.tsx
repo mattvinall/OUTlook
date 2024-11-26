@@ -11,12 +11,11 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="flex-grow flex flex-col items-center justify-center gap-6 px-4 sm:px-8 text-center">
-        <h2 className="text-2xl sm:text-4xl font-semibold">
-          Upload and Process Your CSV
-        </h2>
-        <p className="text-gray-300 max-w-md">
-          Use this tool to check MX records for your uploaded domains and
-          filter out  <span className="font-semibold text-gray-100">Outlook</span>{" "}records.
+        <h1 className="text-5xl sm:text-4xl font-semibold">
+          Stop Wasting $$ and Credits on Outlook Receivers
+        </h1>
+        <p className="text-gray-300 max-w-md text-lg">
+          Use this tool to filter out  <span className="font-semibold text-gray-100">Outlook</span>{" "} MX records before enriching your contacts.
         </p>
         <FileUpload />
       </main>
