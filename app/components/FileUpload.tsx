@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Papa, { ParseResult } from "papaparse";
 import axios from "axios";
 import { saveAs } from "file-saver";
@@ -20,8 +20,16 @@ const FileUpload: React.FC = () => {
     const [processedData, setProcessedData] = useState<CSVRow[] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const [filteredCount, setFilteredCount] = useState<number>(0); // Tracks the number of filtered records
-    const [showConfetti, setShowConfetti] = useState<boolean>(false); // Controls the confetti animation
+    const [filteredCount, setFilteredCount] = useState<number>(0);
+    const [showConfetti, setShowConfetti] = useState<boolean>(false);
+
+    // Reset confetti after a delay
+    useEffect(() => {
+        if (showConfetti) {
+            const timer = setTimeout(() => setShowConfetti(false), 8000); // Stop confetti after 5 seconds
+            return () => clearTimeout(timer); // Cleanup timer on unmount
+        }
+    }, [showConfetti]);
 
     const normalizeDomain = (domain: string | undefined): string | undefined => {
         if (!domain) return undefined;
@@ -138,7 +146,7 @@ const FileUpload: React.FC = () => {
 
                     setProcessedData(filteredData);
                     setFilteredCount(filteredRecords);
-                    setShowConfetti(true); // Trigger the confetti animation
+                    setShowConfetti(true); // Trigger confetti after success
                     setLoading(false);
                 },
                 error: (error: Error): void => {
@@ -221,9 +229,14 @@ const FileUpload: React.FC = () => {
                 </button>
             )}
 
-            {/* Confetti Animation */}
+            {/* Full-Screen Confetti Animation */}
             {showConfetti && (
-                <Confetti />
+                <Confetti
+                    width={window.innerWidth}
+                    height={window.innerHeight}
+                    numberOfPieces={300}
+                    gravity={0.2}
+                />
             )}
         </div>
     );
