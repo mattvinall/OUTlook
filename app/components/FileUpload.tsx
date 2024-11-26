@@ -20,8 +20,8 @@ const FileUpload: React.FC = () => {
     const [processedData, setProcessedData] = useState<CSVRow[] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const [filteredCount, setFilteredCount] = useState<number>(0); // Track filtered records
-    const [showConfetti, setShowConfetti] = useState<boolean>(false); // Control confetti animation
+    const [filteredCount, setFilteredCount] = useState<number>(0); // Tracks the number of filtered records
+    const [showConfetti, setShowConfetti] = useState<boolean>(false); // Controls the confetti animation
 
     const normalizeDomain = (domain: string | undefined): string | undefined => {
         if (!domain) return undefined;
@@ -138,6 +138,7 @@ const FileUpload: React.FC = () => {
 
                     setProcessedData(filteredData);
                     setFilteredCount(filteredRecords);
+                    setShowConfetti(true); // Trigger the confetti animation
                     setLoading(false);
                 },
                 error: (error: Error): void => {
@@ -150,6 +151,7 @@ const FileUpload: React.FC = () => {
             setLoading(false);
         }
     };
+
     const downloadCSV = (): void => {
         if (!processedData) return;
 
@@ -159,7 +161,7 @@ const FileUpload: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center gap-6 p-6 sm:p-8 bg-gray-700 rounded-lg shadow-lg w-full max-w-lg">
+        <div className="flex flex-col items-center gap-6 p-6 sm:p-8 bg-gray-700 rounded-lg shadow-lg w-full max-w-lg relative">
             <h1 className="text-2xl sm:text-3xl font-semibold">File Upload</h1>
 
             {/* File Input */}
@@ -202,7 +204,7 @@ const FileUpload: React.FC = () => {
             {/* Error Message */}
             {error && <p className="text-red-500 text-sm">{error}</p>}
 
-            {/* Success Message and Filtered Count */}
+            {/* Success Message */}
             {!loading && filteredCount > 0 && (
                 <p className="text-green-500 text-center">
                     🎉 You saved {filteredCount} API credits by filtering out records! 🎉
@@ -219,8 +221,16 @@ const FileUpload: React.FC = () => {
                 </button>
             )}
 
-            {/* Celebration Animation */}
-            {showConfetti && <Confetti />}
+            {/* Confetti Animation */}
+            {showConfetti && (
+                <Confetti
+                    recycle={false}
+                    numberOfPieces={300}
+                    gravity={0.2}
+                    width={window.innerWidth}
+                    height={window.innerHeight}
+                />
+            )}
         </div>
     );
 };
