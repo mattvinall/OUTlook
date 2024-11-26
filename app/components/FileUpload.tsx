@@ -223,13 +223,7 @@ const FileUpload: React.FC = () => {
 
             {/* Confetti Animation */}
             {showConfetti && (
-                <Confetti
-                    recycle={false}
-                    numberOfPieces={300}
-                    gravity={0.2}
-                    width={window.innerWidth}
-                    height={window.innerHeight}
-                />
+                <Confetti />
             )}
         </div>
     );
